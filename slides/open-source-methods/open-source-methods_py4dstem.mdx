@@ -1,0 +1,76 @@
+---
+id: open-source-methods_py4dstem
+sidebar_position: 1
+title: Open-Source Phase Retrieval
+hide_table_of_contents: true
+hide_title: true
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+import Py4DSTEMImage from '@site/static/img/py4dstem-phase-retrieval.svg';
+import OutlineImageLight from '@site/static/img/outline_slide_light_m1.svg';
+
+<OutlineImageLight width="240px" height="60px" className="outline-header"/>
+
+## Open-Source Phase Retrieval
+
+<Figure>
+<Py4DSTEMImage width="100%" height="100%"/>
+</Figure>
+
+- Suite of phase retrieval algorithms, including iterative DPC, ptychograpy, and parallax (tc-BF)
+- User-friendly, object-oriented code
+  - Check out our [tutorial notebooks](https://github.com/py4dstem/py4DSTEM_tutorials/tree/main/notebooks) and recent preprint [arXiv:2309.05250](https://arxiv.org/abs/2309.05250)!
+
+<Tabs>
+<TabItem value="dpc" label="Differential Phase Contrast">
+
+```python
+  dpc = py4DSTEM.process.phase.DPCReconstruction(
+     datacube=dataset,
+     energy = 300e3, # eV
+  ).preprocess(
+  ).reconstruct(
+  ).visualize(
+  )
+```
+</TabItem>
+
+<TabItem value="parallax" label="Parallax (tc-BF)">
+
+```python
+parallax = py4DSTEM.process.phase.ParallaxReconstruction(
+      datacube=dataset,
+      energy = 300e3, # eV
+  ).preprocess(
+      edge_blend=8, # pixels
+  ).reconstruct(
+      regularize_shifts=True,
+      running_average=True,
+  ).visualize(
+  )
+```
+</TabItem>
+
+<TabItem value="ptycho" label="Ptychography">
+
+```python
+  ptycho = SingleslicePtychographicReconstruction(
+      datacube=dataset,
+      energy = 300e3, # eV
+      semiangle_cutoff = 21.4, # mrad
+  ).preprocess(
+      fit_function = "plane", # de-scan correction
+  ).reconstruct(
+      max_iter = 8,
+      step_size = 0.5,
+      gaussian_filter_sigma = 0.3, # A
+  ).visualize(
+  )
+```
+
+</TabItem>
+</Tabs>
+
